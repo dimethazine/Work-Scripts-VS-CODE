@@ -1,5 +1,6 @@
 // ==UserScript==
 // @name         Subaru SMv2 Solterra EV Tab (Maybe VMG Tab) - MAIN
+// @version      3.0
 // @author       Roy
 // @match        https://autoloop.us/DMS/App/Notifications/ScheduledMaintenanceV2/EvMakeSettings.aspx*
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
@@ -758,7 +759,480 @@ function configureEVLight() {
       break;
   }
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // VMG Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VMG Aggressive Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function configVMGAggressive() {
+  switch (segmentationSASorNonSAS) {
+    case SAS:
+      if (batchS2SorRR === S2S) {
+        // Sales to Service SAS #ffffff
+
+        // MySubaru/Telematics - Good
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail - Good
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("ac1bba8c-f02b-4b0b-9529-82733e688e51")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("5f552fb6-87a5-4ba3-ad59-4ac614c53867")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("a5013e11-4c5a-494c-b46a-1184adaef1a9")
+          .trigger("change");
+
+        // Coupon
+
+        // Email Subject Lines - Good
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val(
+          "Book your upcoming covered EV service with the Subaru EV experts"
+        );
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, ready to get your covered EV maintenance off to a great start?"
+        );
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, did you know your EV is missing an important first?"
+        );
+
+        // Delays
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_ddlDelay")
+          .val(35)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_ddlDelay")
+          .val(90)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("8e25e24c-9e74-4663-872b-a80ba3fcd58a")
+          .trigger("chosen:updated"); // -45 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSelector_ddlTemplate"
+        )
+          .val("baf48dc4-c038-42d0-97ae-bf0e3b972b5e")
+          .trigger("chosen:updated"); // -23 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSelector_ddlTemplate"
+        )
+          .val("edd6e1c2-894d-4ee1-93e9-ef63e02cb7a0")
+          .trigger("chosen:updated"); // 5 day
+
+        //////////////////////////////////////////////////////////////////
+        // Return Reminder SAS #ffffff
+      } else if (batchS2SorRR === RR) {
+        // MySubaru/Telematics
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("b1c94b29-f910-493e-8230-19c5e6303bcb")
+          .trigger("change");
+        // Coupon
+
+        // Email Subject Lines
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, your next recommended EV service is approaching soon"
+        );
+
+        // Delays
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("ff021fc6-f897-494d-a04c-316b93d81423")
+          .trigger("chosen:updated");
+      }
+      break;
+    case nonSAS:
+      if (batchS2SorRR === S2S) {
+        // Sales to Service non-SAS #ffffff
+
+        // MySubaru/Telematics
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("6dd3c916-3f5b-4f47-bfbd-3aa710817c67")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("f3b909fd-1c03-4a6c-9daf-68d81a2783a4")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("8503d48d-1908-4e2f-a84d-19d4d90903bc")
+          .trigger("change");
+
+        // Coupon
+
+        // Email Subject Lines
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val("Help keep new adventures on the right track with expert care");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, ready to get your EV maintenance off to a great start?"
+        );
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, did you know your EV is missing an important first?"
+        );
+
+        // Delays
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_ddlDelay")
+          .val(35)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_ddlDelay")
+          .val(90)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("db9c0aa5-c641-4a8a-af49-1cf7b38999b2")
+          .trigger("chosen:updated"); // -45 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSelector_ddlTemplate"
+        )
+          .val("0f14d5ae-5e4e-421d-9c89-33d5d732a7f7")
+          .trigger("chosen:updated"); // -23 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSelector_ddlTemplate"
+        )
+          .val("10a16a39-5809-4578-ba4c-2380ef074003")
+          .trigger("chosen:updated"); // 5 day
+      } else if (batchS2SorRR === RR) {
+        // 3
+        // Return Reminder non-SAS #ffffff
+
+        // MySubaru/Telematics
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("f8a366e0-9b60-4cf4-9027-1bc2d8af2de0")
+          .trigger("change");
+
+        // Coupon
+
+        // Email Subject Lines
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val(
+          "$$customerName.FirstName, your next recommended EV service is approaching soon"
+        );
+
+        // Delays
+
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("51f574d0-5af1-4493-a1c5-b19eddc153e6")
+          .trigger("chosen:updated");
+      }
+      break;
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// VMG Light Settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function configVMGAggressive() {
+  switch (segmentationSASorNonSAS) {
+    case SAS:
+      if (batchS2SorRR === S2S) {
+        // Sales to Service SAS #ffffff
+
+        // MySubaru/Telematics - Good
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail - Good
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("ac1bba8c-f02b-4b0b-9529-82733e688e51")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("5f552fb6-87a5-4ba3-ad59-4ac614c53867")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("a5013e11-4c5a-494c-b46a-1184adaef1a9")
+          .trigger("change");
+
+        // Coupon
+
+        // Email Subject Lines - Good
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val(
+          "Book your upcoming covered EV service with the Subaru EV experts"
+        );
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, ready to get your covered EV maintenance off to a great start?"
+        );
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, did you know your EV is missing an important first?"
+        );
+
+        // Delays
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_ddlDelay")
+          .val(35)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_ddlDelay")
+          .val(90)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("8e25e24c-9e74-4663-872b-a80ba3fcd58a")
+          .trigger("chosen:updated"); // -45 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSelector_ddlTemplate"
+        )
+          .val("baf48dc4-c038-42d0-97ae-bf0e3b972b5e")
+          .trigger("chosen:updated"); // -23 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSelector_ddlTemplate"
+        )
+          .val("edd6e1c2-894d-4ee1-93e9-ef63e02cb7a0")
+          .trigger("chosen:updated"); // 5 day
+
+        //////////////////////////////////////////////////////////////////
+        // Return Reminder SAS #ffffff
+      } else if (batchS2SorRR === RR) {
+        // MySubaru/Telematics
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("b1c94b29-f910-493e-8230-19c5e6303bcb")
+          .trigger("change");
+        // Coupon
+
+        // Email Subject Lines
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, your next recommended EV service is approaching soon"
+        );
+
+        // Delays
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("ff021fc6-f897-494d-a04c-316b93d81423")
+          .trigger("chosen:updated");
+      }
+      break;
+    case nonSAS:
+      if (batchS2SorRR === S2S) {
+        // Sales to Service non-SAS #ffffff
+
+        // MySubaru/Telematics
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("6dd3c916-3f5b-4f47-bfbd-3aa710817c67")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("f3b909fd-1c03-4a6c-9daf-68d81a2783a4")
+          .trigger("change");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("8503d48d-1908-4e2f-a84d-19d4d90903bc")
+          .trigger("change");
+
+        // Coupon
+
+        // Email Subject Lines
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val("Help keep new adventures on the right track with expert care");
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, ready to get your EV maintenance off to a great start?"
+        );
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSubject_textBox"
+        ).val(
+          "$customerName.FirstName, did you know your EV is missing an important first?"
+        );
+
+        // Delays
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_ddlDelay")
+          .val(35)
+          .trigger("change");
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_ddlDelay")
+          .val(90)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("db9c0aa5-c641-4a8a-af49-1cf7b38999b2")
+          .trigger("chosen:updated"); // -45 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_emailSelector_ddlTemplate"
+        )
+          .val("0f14d5ae-5e4e-421d-9c89-33d5d732a7f7")
+          .trigger("chosen:updated"); // -23 day
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_emailSelector_ddlTemplate"
+        )
+          .val("10a16a39-5809-4578-ba4c-2380ef074003")
+          .trigger("chosen:updated"); // 5 day
+      } else if (batchS2SorRR === RR) {
+        // 3
+        // Return Reminder non-SAS #ffffff
+
+        // MySubaru/Telematics
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool"
+        )
+          .prop("checked", true)
+          .trigger("change");
+
+        // Print Mail
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_printDocumentSelector_ddlPrintDocuments"
+        )
+          .val("f8a366e0-9b60-4cf4-9027-1bc2d8af2de0")
+          .trigger("change");
+
+        // Coupon
+
+        // Email Subject Lines
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSubject_textBox"
+        ).val(
+          "$$customerName.FirstName, your next recommended EV service is approaching soon"
+        );
+
+        // Delays
+
+        $("#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_ddlDelay")
+          .val(-23)
+          .trigger("change");
+
+        // Email Templates
+        $(
+          "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_emailSelector_ddlTemplate"
+        )
+          .val("51f574d0-5af1-4493-a1c5-b19eddc153e6")
+          .trigger("chosen:updated");
+      }
+      break;
+  }
+}
