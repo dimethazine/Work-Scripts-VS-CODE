@@ -25,9 +25,8 @@ var vogs = [];
 var S2S = "1";
 var RR = "2";
 let c = $("#ctl00_ctl00_Main_Main_ddlExistingMakes");
-let selectedMake = $(
-  "#ctl00_ctl00_Main_Main_ddlExistingMakes option:selected"
-).val();
+("#ctl00_ctl00_Main_Main_ddlExistingMakes option:selected");
+let selectedMake = $().val();
 let selectedMakeText = $(
   "#ctl00_ctl00_Main_Main_ddlExistingMakes option:selected"
 ).text();
@@ -182,16 +181,55 @@ const telematics2 =
 //   "#ctl00_ctl00_Main_Main_rptSchedule_ctl09_schedule_rptUiGroups_ctl00_rptCustomBatchSettings_ctl01_cbBatchSettingBool";
 
 // Coupon selector constants
-// const couponSelector1 = "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_coupon1";
-// const couponSelector2 = '#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon1'
-// const couponSelector3 =
-// const couponSelector4 =
-// const couponSelector5 =
-// const couponSelector6 =
-// const couponSelector7 =
-// const couponSelector8 =
-// const couponSelector9 =
-// const couponSelector10 =
+
+const couponSelectorInterval0coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_coupon1";
+const couponSelectorInterval0coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_coupon2";
+const couponSelectorInterval0coupon3 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_coupon3";
+const couponSelectorInterval1coupon0 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon1";
+const couponSelectorInterval1coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon2";
+const couponSelectorInterval1coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon3";
+const couponSelectorInterval2coupon0 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon1";
+const couponSelectorInterval2coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon2";
+const couponSelectorInterval2coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon3";
+const couponSelectorInterval3coupon0 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon1";
+const couponSelectorInterval3coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon2";
+const couponSelectorInterval3coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon3";
+const couponSelectorInterval4coupon0 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon1";
+const couponSelectorInterval4coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon2";
+const couponSelectorInterval4coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon3";
+const couponSelectorInterval5coupon0 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon1";
+const couponSelectorInterval5coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon2";
+const couponSelectorInterval5coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon3";
+const couponSelectorInterval6coupon0 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon1";
+const couponSelectorInterval6coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon2";
+const couponSelectorInterval6coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon3";
+const couponSelectorInterval7coupon0 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon1";
+const couponSelectorInterval7coupon1 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon2";
+const couponSelectorInterval7coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon3";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
