@@ -30,6 +30,10 @@ let selectedMake = $().val();
 let selectedMakeText = $(
   "#ctl00_ctl00_Main_Main_ddlExistingMakes option:selected"
 ).text();
+let opacity = $("#ctl00_ctl00_Main_Main_divNotificationNavigation").css(
+  "opacity"
+);
+var currentValue = $("#ctl00_ctl00_Main_Main_ddlExistingVMGs").val();
 
 // Email template constants:
 // Sales to service/first reminder - non SAS - fallback
@@ -231,6 +235,84 @@ const couponSelectorInterval7coupon2 =
 const couponSelectorInterval7coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon3";
 
+// Basic checks:
+let vmgOrEv = "";
+// Check
+if (
+  $("#ctl00_ctl00_Main_TopNav_TabbedNavigation_liVmgSettings").hasClass(
+    "selected"
+  )
+) {
+  vmgOrEv = "vmg";
+} else if (
+  $("#ctl00_ctl00_Main_TopNav_TabbedNavigation_liEvSettings").hasClass(
+    "selected"
+  )
+) {
+  vmgOrEv = "ev";
+}
+
+// Email Template VMG Selector Function
+function processMatch(match, dropdownElementId, currentVmg) {
+  let formattedMatch = match[1].replace(" then every ", "-");
+  console.log(formattedMatch);
+  $(dropdownElementId)
+    .find("option")
+    .each(function () {
+      if (this.text.includes(`${currentVmg}${formattedMatch}`)) {
+        let c = $(this).val();
+        $(dropdownElementId).val(c).trigger("chosen:updated");
+        return false;
+      }
+    });
+}
+// Email Template VMG Selector Function Start and Check
+function emailTemplateVmgSelectorStart(emailTemplateInterval, currentVmg) {
+  if (vmgOrEv == "vmg") {
+    var selectedOptionText = $(
+      "#ctl00_ctl00_Main_Main_ddlExistingVMGs option:selected"
+    )
+      .text()
+      .trim(); // Replace with your actual option id
+
+    // Try to match the "120K then every 50K" case
+    var match = selectedOptionText.match(
+      /(\d+K then every \d+K)(?:\s+-\s+Enabled\s+\(\d+\))?/
+    );
+
+    if (match) {
+      processMatch(match, emailTemplateInterval);
+    } else {
+      // Try to match the "normal" case
+      match = selectedOptionText.match(
+        /\((\d+K(?:-\d+K)?)\)(?:\s+-\s+Enabled\s+\(\d+\))?/i
+      );
+      if (match) {
+        processMatch(match, emailTemplateInterval);
+      } else {
+        console.log("No match found");
+      }
+    }
+  } else {
+    console.log("Element is not selected");
+  }
+}
+
+// Coupon Selector Function
+function selectOptionByText(dropdownSelector, couponText) {
+  let couponSelector = $(dropdownSelector);
+  let dropdownOptions = couponSelector.find("option");
+
+  dropdownOptions.each(function () {
+    let couponOptionText = $(this).text();
+    if (couponOptionText.includes(couponText)) {
+      $(this).prop("selected", true);
+    }
+
+    console.log(couponSelector.val());
+  });
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -238,12 +320,18 @@ const couponSelectorInterval7coupon3 =
 // Start of Script
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function startFunction() {
-  let isConfigured = await checkMakeConfig();
-  console.log(isConfigured);
-  if (isConfigured === true) {
-    console.log("isConfigured === true - go to next dealership");
-  } else if (isConfigured === false) {
-    console.log("needs to be configured");
+  if (vmgOrEv == "ev") {
+    let isConfigured = await checkMakeConfig();
+    console.log(isConfigured);
+    if (isConfigured === true) {
+      console.log("isConfigured === true - go to VMG's");
+      window.location =
+        "https://autoloop.us/DMS/App/Notifications/ScheduledMaintenanceV2/VmgSettings.aspx?ServiceId=54";
+    } else if (isConfigured === false) {
+      console.log("needs to be configured");
+      configureSettings();
+    }
+  } else if (vmgOrEv == "vmg") {
     configureSettings();
   }
 }
@@ -259,9 +347,16 @@ async function checkMakeConfig() {
   return new Promise((resolve, reject) => {
     $("#ctl00_ctl00_Main_Main_ddlExistingMakes option").each(function () {
       let optionText = $(this).text();
-      if (optionText.includes("Subaru - Enabled (4)")) {
-        resolve(true);
-        return false; // Exit the loop early if a match is found
+      if (sessionStorage.getItem("version") == "aggressive") {
+        if (optionText.includes("Subaru - Enabled (32)")) {
+          resolve(true);
+          return false; // Exit the loop early if a match is found
+        }
+      } else if (sessionStorage.getItem("version") == "light") {
+        if (optionText.includes("Subaru - Enabled (28)")) {
+          resolve(true);
+          return false; // Exit the loop early if a match is found
+        }
       }
     });
     resolve(false); // Resolve as false if no match is found
@@ -271,28 +366,88 @@ async function checkMakeConfig() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Start the configuration process - Select and Configure
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+var version = sessionStorage.getItem("version");
 function configureSettings() {
-  if (selectedMake !== "Subaru") {
-    console.log("select make");
-    selectMake();
-  } else if (selectedMakeText.indexOf("Subaru") > 0) {
-    if ($("#ctl00_ctl00_Main_Main_cbEnabled").prop("checked") == false) {
-      enableMakeSetting();
-      console.log("test");
+  if (vmgOrEv == "ev") {
+    // if (selectedMake !== "Subaru") {
+    if (selectedMake.indexOf("Subaru") < 0) {
+      console.log("select make");
+      selectMake();
+    } else if (selectedMakeText.indexOf("Subaru") > 0) {
+      if ($("#ctl00_ctl00_Main_Main_cbEnabled").prop("checked") == false) {
+        enableMakeSetting();
+        console.log("test");
+      } else if (
+        $("#ctl00_ctl00_Main_Main_cbEnabled").prop("checked") == true &&
+        $(delay1).val().length > 0 &&
+        segmentationSASorNonSAS != defaultSegmentation
+      ) {
+        segmentationBatchTypeSelector();
+      } else if (
+        $("#ctl00_ctl00_Main_Main_cbEnabled").prop("checked") == true &&
+        $(delay1).val().length == 0
+      ) {
+        if (version == "aggressive") {
+          configureEVAggressive(segmentationSASorNonSAS); // Runs every single time until it's fully configured (Subaru - Enabled (4))
+        } else if (version == "light") {
+          configureEVLight(segmentationSASorNonSAS);
+        }
+      }
+    }
+    ///////////////////////////////////////////////////////////////////
+    // VMG Configuration
+  } else if (vmgOrEv == "vmg") {
+    var array = JSON.parse(sessionStorage.getItem("array")) || [];
+    //////////////////////////////
+    // Get the array of VMG's
+    if (array.length === 0) {
+      $("#ctl00_ctl00_Main_Main_ddlExistingVMGs option").each(function () {
+        var optionText = $(this).text();
+        if (
+          optionText.includes("Subaru 5K - EV's") &&
+          !optionText.includes("(32)")
+        ) {
+          array.push($(this).val());
+        }
+      });
+
+      // store the array in sessionStorage
+      sessionStorage.setItem("array", JSON.stringify(array));
+    }
+    //////////////////////////////
+
+    //////////////////////////////
+    // Select the correct VMG
+    if (array[0] !== currentValue) {
+      $("#ctl00_ctl00_Main_Main_ddlExistingVMGs").val(array[0]);
+      $("#ctl00_ctl00_Main_Main_btnEditExisting").click();
     } else if (
-      $("#ctl00_ctl00_Main_Main_cbEnabled").prop("checked") == true &&
-      $(delay1).val().length > 0 &&
-      segmentationSASorNonSAS != defaultSegmentation
+      (batchS2SorRR == 1 &&
+        segmentationSASorNonSAS == defaultSegmentation &&
+        saved.length == 0 &&
+        opacity == 0.3) ||
+      (batchS2SorRR == 2 &&
+        segmentationSASorNonSAS == SAS &&
+        saved.length == 0 &&
+        opacity == 1) ||
+      (batchS2SorRR == 1 &&
+        segmentationSASorNonSAS == SAS &&
+        saved.length == 0 &&
+        $("#ctl00_ctl00_Main_Main_cbEnabled").prop("checked") == false)
     ) {
-      segmentationBatchTypeSelector();
+      console.log("switch to SAS");
+      vmgSettingsStart(array);
     } else if (
-      $("#ctl00_ctl00_Main_Main_cbEnabled").prop("checked") == true &&
-      $(delay1).val().length == 0
+      $(delay1).val().length == 0 &&
+      segmentationSASorNonSAS != defaultSegmentation &&
+      saved.length == 0 &&
+      opacity == 1
     ) {
-      if (version.sessionStorage.toLowerCase() == "aggressive") {
-        configureEVAggressive(segmentationSASorNonSAS); // Runs every single time until it's fully configured (Subaru - Enabled (4))
-      } else if (version.sessionStorage.toLowerCase() == "light") {
-        configureEVLight(segmentationSASorNonSAS);
+      console.log("configure");
+      if (version == "aggressive") {
+        //configureEVAggressive(segmentationSASorNonSAS); // Runs every single time until it's fully configured (Subaru - Enabled (4))
+      } else if (version == "light") {
+        //configureEVLight(segmentationSASorNonSAS);
       }
     }
   }
@@ -309,8 +464,28 @@ function enableMakeSetting() {
       .val("6454728c-ed6b-4532-98fa-327232d32e81")
       .trigger("change");
     console.log("test enableMakeSetting() segmentation switch");
-  } else if (segmentationSASorNonSAS === SAS) {
+  } else if (segmentationSASorNonSAS === SAS && opacity == 0.3) {
     $("#ctl00_ctl00_Main_Main_cbEnabled").click();
+  }
+}
+
+function vmgSettingsStart(array) {
+  if (segmentationSASorNonSAS === defaultSegmentation) {
+    $("#ctl00_ctl00_Main_Main_rptGroup_ctl01_ddlGroupItemSelection")
+      .val("6454728c-ed6b-4532-98fa-327232d32e81")
+      .trigger("change");
+  } else if (segmentationSASorNonSAS === SAS && opacity == 0.3) {
+    $("#ctl00_ctl00_Main_Main_cbEnabled").click();
+  } else if (
+    segmentationSASorNonSAS == SAS &&
+    batchS2SorRR == RR &&
+    opacity == 1
+  ) {
+    $("#ctl00_ctl00_Main_Main_rptGroup_ctl00_ddlGroupItemSelection")
+      .val(1)
+      .trigger("change");
+    array.shift();
+    sessionStorage.setItem("array", JSON.stringify(array));
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,20 +495,42 @@ function enableMakeSetting() {
 // Segmentation and Batch Type Selector
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function segmentationBatchTypeSelector() {
-  if (segmentationSASorNonSAS === SAS && batchS2SorRR === S2S) {
+  if (
+    segmentationSASorNonSAS === SAS &&
+    batchS2SorRR === S2S &&
+    saved.length > 0
+  ) {
     $("#ctl00_ctl00_Main_Main_rptGroup_ctl01_ddlGroupItemSelection")
       .val("fa52d866-4b5a-4374-b671-57f813d7b85a")
       .trigger("change");
-  } else if (segmentationSASorNonSAS === nonSAS && batchS2SorRR === S2S) {
+  } else if (
+    segmentationSASorNonSAS === nonSAS &&
+    batchS2SorRR === S2S &&
+    saved.length > 0
+  ) {
     $("#ctl00_ctl00_Main_Main_rptGroup_ctl00_ddlGroupItemSelection")
       .val(2)
       .trigger("change");
-  } else if (segmentationSASorNonSAS === nonSAS && batchS2SorRR === RR) {
+  } else if (
+    segmentationSASorNonSAS === nonSAS &&
+    batchS2SorRR === RR &&
+    saved.length > 0
+  ) {
     $("#ctl00_ctl00_Main_Main_rptGroup_ctl01_ddlGroupItemSelection")
       .val("6454728c-ed6b-4532-98fa-327232d32e81")
       .trigger("change");
-  } else if (segmentationSASorNonSAS === SAS && batchS2SorRR === RR) {
-    console.log("next dealership");
+  } else if (
+    segmentationSASorNonSAS === SAS &&
+    batchS2SorRR === RR &&
+    saved.length > 0
+  ) {
+    if (vmgOrEv == "ev") {
+      window.location =
+        "https://autoloop.us/DMS/App/Notifications/ScheduledMaintenanceV2/VmgSettings.aspx?ServiceId=54";
+      console.log("go to vmg settings");
+    } else if (vmgOrEv == "vmg") {
+      console.log("next dealership");
+    }
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -376,6 +573,14 @@ function configureEVAggressive() {
         $(print6).val(fmcSASComplete3).trigger("change");
 
         // Coupon
+        selectOptionByText(couponSelectorInterval1coupon1, "Subaru SAS - S2S");
+        selectOptionByText(couponSelectorInterval2coupon1, "Subaru SAS - S2S");
+        selectOptionByText(couponSelectorInterval3coupon1, "EV0012");
+        selectOptionByText(couponSelectorInterval3coupon2, "EV0389");
+        selectOptionByText(couponSelectorInterval4coupon1, "EV0012");
+        selectOptionByText(couponSelectorInterval4coupon2, "EV0389");
+        selectOptionByText(couponSelectorInterval5coupon1, "EV0012");
+        selectOptionByText(couponSelectorInterval5coupon2, "EV0389");
 
         // Email Subject Lines
         $(emailSubj1).val("It's almost time for your first Subaru EV service");
@@ -465,20 +670,6 @@ function configureEVAggressive() {
         selectOptionByText(couponSelectorInterval4coupon2, "EV0389");
         selectOptionByText(couponSelectorInterval5coupon1, "EV0012");
         selectOptionByText(couponSelectorInterval5coupon2, "EV0389");
-        
-        function selectOptionByText(dropdownSelector, couponText) {
-            let couponSelector = $(dropdownSelector)
-            let dropdownOptions = couponSelector.find('option')
-        
-            dropdownOptions.each(function() {
-                let couponOptionText = $(this).text();
-                if(couponOptionText.includes(couponText)) {
-                    $(this).prop('selected', true);
-                }
-        
-            console.log(couponSelector.val())
-              })}  
-        
 
         // Email Subject Lines
         $(emailSubj1).val("It's almost time for your first Subaru EV service");
@@ -506,11 +697,14 @@ function configureEVAggressive() {
 
         // Email Templates
         $(email1).val(FO2010101).trigger("chosen:updated"); // -45 day
-        if (2 = 2) {
-        $(email2).val(FO2010201fallback).trigger("chosen:updated"); // -23 day
-        } else if (2 != 2) {
+
+        // Email Template Interval 2 Selector
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20102-01-");
+        } else if (vmgOrEv == "ev") {
           $(email2).val(FO2010201fallback).trigger("chosen:updated"); // -23 day
         }
+
         $(email3).val(FO2010301).trigger("chosen:updated"); // 5 day
         $(email4).val(FO2010701).trigger("chosen:updated"); // 35 day
         $(email5).val(FO2010801).trigger("chosen:updated"); // 65 day
