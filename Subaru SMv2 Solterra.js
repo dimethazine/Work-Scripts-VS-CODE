@@ -188,47 +188,47 @@ const couponSelectorInterval0coupon2 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_coupon2";
 const couponSelectorInterval0coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl00_schedule_coupon3";
-const couponSelectorInterval1coupon0 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon1";
 const couponSelectorInterval1coupon1 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon2";
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon1";
 const couponSelectorInterval1coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon2";
+const couponSelectorInterval1coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl01_schedule_coupon3";
-const couponSelectorInterval2coupon0 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon1";
 const couponSelectorInterval2coupon1 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon2";
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon1";
 const couponSelectorInterval2coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon2";
+const couponSelectorInterval2coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl02_schedule_coupon3";
-const couponSelectorInterval3coupon0 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon1";
 const couponSelectorInterval3coupon1 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon2";
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon1";
 const couponSelectorInterval3coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon2";
+const couponSelectorInterval3coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl03_schedule_coupon3";
-const couponSelectorInterval4coupon0 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon1";
 const couponSelectorInterval4coupon1 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon2";
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon1";
 const couponSelectorInterval4coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon2";
+const couponSelectorInterval4coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl04_schedule_coupon3";
-const couponSelectorInterval5coupon0 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon1";
 const couponSelectorInterval5coupon1 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon2";
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon1";
 const couponSelectorInterval5coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon2";
+const couponSelectorInterval5coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl05_schedule_coupon3";
-const couponSelectorInterval6coupon0 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon1";
 const couponSelectorInterval6coupon1 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon2";
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon1";
 const couponSelectorInterval6coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon2";
+const couponSelectorInterval6coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl06_schedule_coupon3";
-const couponSelectorInterval7coupon0 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon1";
 const couponSelectorInterval7coupon1 =
-  "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon2";
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon1";
 const couponSelectorInterval7coupon2 =
+  "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon2";
+const couponSelectorInterval7coupon3 =
   "#ctl00_ctl00_Main_Main_rptSchedule_ctl07_schedule_coupon3";
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -457,6 +457,28 @@ function configureEVAggressive() {
         $(print6).val(fmcComplete3EV).trigger("change");
 
         // Coupon
+        selectOptionByText(couponSelectorInterval1coupon1, "EV0012");
+        selectOptionByText(couponSelectorInterval1coupon2, "EV0389");
+        selectOptionByText(couponSelectorInterval3coupon1, "EV0012");
+        selectOptionByText(couponSelectorInterval3coupon2, "EV0389");
+        selectOptionByText(couponSelectorInterval4coupon1, "EV0012");
+        selectOptionByText(couponSelectorInterval4coupon2, "EV0389");
+        selectOptionByText(couponSelectorInterval5coupon1, "EV0012");
+        selectOptionByText(couponSelectorInterval5coupon2, "EV0389");
+        
+        function selectOptionByText(dropdownSelector, couponText) {
+            let couponSelector = $(dropdownSelector)
+            let dropdownOptions = couponSelector.find('option')
+        
+            dropdownOptions.each(function() {
+                let couponOptionText = $(this).text();
+                if(couponOptionText.includes(couponText)) {
+                    $(this).prop('selected', true);
+                }
+        
+            console.log(couponSelector.val())
+              })}  
+        
 
         // Email Subject Lines
         $(emailSubj1).val("It's almost time for your first Subaru EV service");
@@ -484,7 +506,11 @@ function configureEVAggressive() {
 
         // Email Templates
         $(email1).val(FO2010101).trigger("chosen:updated"); // -45 day
+        if (2 = 2) {
         $(email2).val(FO2010201fallback).trigger("chosen:updated"); // -23 day
+        } else if (2 != 2) {
+          $(email2).val(FO2010201fallback).trigger("chosen:updated"); // -23 day
+        }
         $(email3).val(FO2010301).trigger("chosen:updated"); // 5 day
         $(email4).val(FO2010701).trigger("chosen:updated"); // 35 day
         $(email5).val(FO2010801).trigger("chosen:updated"); // 65 day
@@ -640,325 +666,6 @@ function configureEVLight() {
         // Email Subject Lines
         $(emailSubj1).val(
           "Your next recommended EV service is approaching soon"
-        );
-
-        // Delays
-
-        $(delay1).val(-23).trigger("change");
-
-        // Email Templates
-        $(email1).val(FO2012001fallback).trigger("chosen:updated");
-      }
-      break;
-  }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// VMG Settings
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// VMG Aggressive Settings
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function configVMGAggressive() {
-  switch (segmentationSASorNonSAS) {
-    case SAS:
-      if (batchS2SorRR === S2S) {
-        // Sales to Service SAS #ffffff Sales to Service/First Reminder - SAS Aggressive Cadence - Minor (5K)
-
-        // MySubaru/Telematics - Good
-        $(telematics2).prop("checked", true).trigger("change");
-
-        // Print Mail - Good
-        $(print2).val(s2sBefore23SASEV).trigger("change");
-        $(print4).val(fmcSASComplete1).trigger("change");
-        $(print5).val("1d13596d-1737-484a-aab4-4ba7ffc862b0").trigger("change");
-        $(print6).val(fmcSASComplete3).trigger("change");
-
-        // Coupon
-
-        // Email Subject Lines - Good
-        $(emailSubj1).val("It's almost time for your first Subaru EV service");
-        $(emailSubj2).val(
-          "Book your upcoming covered EV service with the Subaru EV experts"
-        );
-        $(emailSubj3).val(
-          "Keep adventures going strong—schedule your covered overdue service"
-        );
-        $(emailSubj4).val(
-          "Ready to get your covered EV maintenance off to a great start?"
-        );
-        $(emailSubj5).val(
-          "Did you know missing your EV's first covered service could affect its performance?"
-        );
-        $(emailSubj6).val(
-          "Did you know your EV is missing an important first?"
-        );
-
-        // Delays
-        $(delay1).val(-45).trigger("change");
-        $(delay2).val(-23).trigger("change");
-        $(delay3).val(5).trigger("change");
-        $(delay4).val(35).trigger("change");
-        $(delay5).val(65).trigger("change");
-        $(delay6).val(90).trigger("change");
-
-        // Email Templates
-        $(email1).val(FO2010401).trigger("chosen:updated"); // -45 day
-        $(email2)
-          .val("4c198400-6ddf-4918-8370-3549d965da3b")
-          .trigger("chosen:updated"); // -23 day
-        $(email3).val(FO2010601).trigger("chosen:updated"); // 5 day
-        $(email3).val(FO2011001).trigger("chosen:updated"); // 35 day
-        $(email3).val(FO2011101).trigger("chosen:updated"); // 65 day
-        $(email3).val(FO2011201).trigger("chosen:updated"); // 90 day
-
-        //////////////////////////////////////////////////////////////////
-        // Return Reminder SAS #ffffff Return Reminder - SAS Aggressive Cadence - Minor (5K)
-      } else if (batchS2SorRR === RR) {
-        // MySubaru/Telematics
-        $(telematics2).prop("checked", true).trigger("change");
-
-        // Print Mail
-        $(print2).val(rrBefore23SASEV).trigger("change");
-        // Coupon
-
-        // Email Subject Lines
-        $(emailSubj1).val(
-          "We'll help you stay current on your covered EV care"
-        );
-        $(emailSubj2).val(
-          "Your next recommended EV service is approaching soon"
-        );
-        $(emailSubj3).val(
-          "Book your past-due service to keep covered EV care right on track"
-        );
-
-        // Delays
-        $(delay1).val(-45).trigger("change");
-        $(delay2).val(-23).trigger("change");
-        $(delay3).val(5).trigger("change");
-
-        // Email Templates
-        $(email1).val(FO2012201).trigger("chosen:updated");
-        $(email1)
-          .val("d39bd5d0-127b-4eda-93a7-dce4e60dd981")
-          .trigger("chosen:updated");
-        $(email1).val(FO2012401).trigger("chosen:updated");
-      }
-      break;
-
-    // Sales to Service non-SAS #ffffff Sales to Service/First Reminder - Non SAS Aggressive Cadence - Minor (5K)
-    case nonSAS:
-      if (batchS2SorRR === S2S) {
-        // MySubaru/Telematics
-        $(telematics2).prop("checked", true).trigger("change");
-
-        // Print Mail
-        $(print2).val(s2sBefore23EV).trigger("change");
-        $(print4).val(fmcComplete1EV).trigger("change");
-        $(print5).val(fmcComplete2EV).trigger("change");
-
-        $(print6).val(fmcComplete3EV).trigger("change");
-
-        // Coupon
-
-        // Email Subject Lines
-        $(emailSubj1).val("It's almost time for your first Subaru EV service");
-        $(emailSubj2).val(
-          "Help keep new adventures on the right track with expert care"
-        );
-        $(emailSubj3).val("Routine vehicle maintenance is vital");
-        $(emailSubj4).val(
-          "Ready to get your EV maintenance off to a great start?"
-        );
-        $(emailSubj5).val(
-          "Did you know missing your EV's first service could affect its performance?"
-        );
-        $(emailSubj6).val(
-          "Did you know your EV is missing an important first?"
-        );
-
-        // Delays
-        $(delay1).val(-45).trigger("change");
-        $(delay2).val(-23).trigger("change");
-        $(delay3).val(5).trigger("change");
-        $(delay4).val(35).trigger("change");
-        $(delay5).val(65).trigger("change");
-        $(delay6).val(90).trigger("change");
-
-        // Email Templates
-        $(email1).val(FO2010101).trigger("chosen:updated"); // -45 day
-        $(email2)
-          .val("5ba14ac1-bb74-412f-a1c7-1fb4301f33ef")
-          .trigger("chosen:updated"); // -23 day
-        $(email3).val(FO2010301).trigger("chosen:updated"); // 5 day
-        $(email4).val(FO2010701).trigger("chosen:updated"); // 35 day
-        $(email5).val(FO2010801).trigger("chosen:updated"); // 65 day
-        $(email6).val(FO2010901).trigger("chosen:updated"); // 90 day
-
-        // Return Reminder non-SAS #ffffff Return Reminder - Non SAS Aggressive Cadence - Minor (5K) - DONE
-      } else if (batchS2SorRR === RR) {
-        // MySubaru/Telematics
-        $(telematics2).prop("checked", true).trigger("change");
-
-        // Print Mail
-        $(print2).val(rrBefore23nonSASEV).trigger("change");
-
-        // Coupon
-
-        // Email Subject Lines
-        $(emailSubj1).val("We'll help you stay current on your EV care");
-        $(emailSubj2).val(
-          "Your next recommended EV service is approaching soon"
-        );
-        $(emailSubj3).val(
-          "Book your past-due service to keep your EV care right on track"
-        );
-
-        // Delays
-
-        $(delay1).val(-45).trigger("change");
-        $(delay2).val(-23).trigger("change");
-        $(delay3).val(5).trigger("change");
-
-        // Email Templates
-        $(email1).val(FO2011901).trigger("chosen:updated");
-        $(email2)
-          .val("f56a5c7d-a341-4b15-aad0-48f887d14e76")
-          .trigger("chosen:updated");
-        $(email3).val(FO2012101).trigger("chosen:updated");
-      }
-      break;
-  }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// VMG Light Settings
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function configVMGLight() {
-  switch (segmentationSASorNonSAS) {
-    case SAS:
-      if (batchS2SorRR === S2S) {
-        // Sales to Service SAS #ffffff Sales to Service/First Reminder - SAS Light Cadence - Minor (5K)
-
-        // MySubaru/Telematics - Good
-        $(telematics1).prop("checked", true).trigger("change");
-
-        // Print Mail - Good
-        $(print1).val(s2sBefore23SASEV).trigger("change");
-        $(print2).val(fmcSASComplete1).trigger("change");
-        $(print3).val(fmcSASComplete3).trigger("change");
-
-        // Coupon
-
-        // Email Subject Lines - Good
-        $(emailSubj1).val(
-          "Book your upcoming covered EV service with the Subaru EV experts"
-        );
-        $(emailSubj2).val(
-          "Ready to get your covered EV maintenance off to a great start?"
-        );
-        $(emailSubj3).val(
-          "Did you know your EV is missing an important first?"
-        );
-
-        // Delays
-        $(delay1).val(-23).trigger("change");
-        $(delay2).val(35).trigger("change");
-        $(delay3).val(90).trigger("change");
-
-        // Email Templates
-        if (
-          $("#ctl00_ctl00_Main_Main_ddlExistingVMGs option:selected").indexOf(
-            "5k"
-          ) != -1
-        ) {
-          $(email1)
-            .val("4c198400-6ddf-4918-8370-3549d965da3b")
-            .trigger("chosen:updated"); // -45 day
-        }
-        $(email2).val(FO2011001).trigger("chosen:updated"); // -23 day
-        $(email3).val(FO2011201).trigger("chosen:updated"); // 5 day
-
-        //////////////////////////////////////////////////////////////////
-        // Return Reminder SAS #ffffff Return Reminder - SAS Light Cadence - Minor (5K)
-      } else if (batchS2SorRR === RR) {
-        // MySubaru/Telematics
-        $(telematics1).prop("checked", true).trigger("change");
-
-        // Print Mail
-        $(print1).val(rrBefore23SASEV).trigger("change");
-        // Coupon
-
-        // Email Subject Lines
-        $(emailSubj1).val(
-          "$customerName.FirstName, your next recommended EV service is approaching soon"
-        );
-
-        // Delays
-        $(delay1).val(-23).trigger("change");
-
-        // Email Templates
-        $(email1).val(FO2012301fallback).trigger("chosen:updated");
-      }
-      break;
-
-    // Sales to Service non-SAS #ffffff Sales to Service/First Reminder - Non SAS Light Cadence - Minor (5k)
-    case nonSAS:
-      if (batchS2SorRR === S2S) {
-        // MySubaru/Telematics
-        $(telematics1).prop("checked", true).trigger("change");
-
-        // Print Mail
-        $(print1).val(s2sBefore23EV).trigger("change");
-        $(print2).val(fmcComplete1EV).trigger("change");
-        $(print3).val(fmcComplete3EV).trigger("change");
-
-        // Coupon
-
-        // Email Subject Lines
-        $(emailSubj1).val(
-          "Help keep new adventures on the right track with expert care"
-        );
-        $(emailSubj2).val(
-          "$customerName.FirstName, ready to get your EV maintenance off to a great start?"
-        );
-        $(emailSubj3).val(
-          "$customerName.FirstName, did you know your EV is missing an important first?"
-        );
-
-        // Delays
-        $(delay1).val(-23).trigger("change");
-        $(delay2).val(35).trigger("change");
-        $(delay3).val(90).trigger("change");
-
-        // Email Templates
-        $(email1).val(FO2010201fallback).trigger("chosen:updated"); // -45 day
-        $(email2).val(FO2010701).trigger("chosen:updated"); // -23 day
-        $(email3).val(FO2010901).trigger("chosen:updated"); // 5 day
-
-        // Return Reminder non-SAS #ffffff Return Reminder - Non SAS Light Cadence - Minor (5K)
-      } else if (batchS2SorRR === RR) {
-        // MySubaru/Telematics
-        $(telematics1).prop("checked", true).trigger("change");
-
-        // Print Mail
-        $(print1).val(rrBefore23nonSASEV).trigger("change");
-
-        // Coupon
-
-        // Email Subject Lines
-        $(emailSubj1).val(
-          "$$customerName.FirstName, your next recommended EV service is approaching soon"
         );
 
         // Delays
