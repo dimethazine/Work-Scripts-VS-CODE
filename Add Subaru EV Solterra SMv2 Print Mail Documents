@@ -1,0 +1,120 @@
+// ==UserScript==
+// @name         Add Subaru EV Solterra SMv2 Print Mail Documents
+// @author       Roy
+// @match        https://autoloop.us/DMS/App/DealershipSettings/PrintDocuments.aspx
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=autoloop.us
+// @require https://raw.githubusercontent.com/lodash/lodash/4.17.4/dist/lodash.js
+// ==/UserScript==
+
+let state = sessionStorage.state2;
+let c = $('select[id*="ctl00_ctl00_Main_Main_gvDealerPrintDocuments_ctl"]').val()
+let b = $('select[id*="#ctl00_ctl00_Main_Main_gvDealerPrintDocuments_ctl13_lnkInsert"]')
+console.log(c)
+console.log(b)
+
+let mailSelector = $('#ctl00_ctl00_Main_Main_ddlMailType').val()
+console.log(mailSelector)
+
+
+var disablerFunction = function () {
+
+    window.alert = function alert(msg) { console.log('Hidden Alert ' + msg); };
+    window.confirm = function confirm(msg) {
+        console.log("Hidden Confirm " + msg);
+        return true; /*simulates user clicking yes*/
+    };
+
+};
+
+var disablerCode = "(" + disablerFunction.toString() + ")();";
+
+var disablerScriptElement = document.createElement('script');
+disablerScriptElement.textContent = disablerCode;
+
+document.documentElement.appendChild(disablerScriptElement);
+disablerScriptElement.parentNode.removeChild(disablerScriptElement);
+
+let subaruUnitedPrintMailDocs = ["Scheduled Maintenance First Reminder -23 Day EV","Scheduled Maintenance - Return Reminder -23 Day (EV)", "SAS Scheduled Maintenance First Reminder - 23 Day EV", "(SAS) Scheduled Maintenance - Return Reminder -23 Day (EV)"];
+let visionPrintMailDocs = ["First Maintenance Complete 1 -- 7/13 Mos (EV)","First Maintenance Complete 2 -- 8/14 Mos (EV)","First Maintenance Complete 3 -- 9/15 Mos (EV)","(SAS) First Maintenance Complete 1 -- 7/13 Mos (EV)","(SAS) First Maintenance Complete 2 -- 8/14 Mos (EV)","(SAS) First Maintenance Complete 3 -- 9/15 Mos (EV)"];
+let elementsInGridSubaru = [];
+let elementsInGridVision = [];
+
+let switchPrintMailDocSelector = () => {
+    $('#ctl00_ctl00_Main_Main_ddlMailType').val(13).trigger('change');
+}
+
+let subaruUnitedFn = () => {
+    $('tr.GridRow, tr.GridRowAlt').each(function() {
+        let tdText = $(this).find('td:nth-child(2)').text().trim();
+        if (subaruUnitedPrintMailDocs.includes(tdText)) {
+            elementsInGridSubaru.push(tdText);
+        }
+    });
+
+let elementsNotInGridSubaru = subaruUnitedPrintMailDocs.filter(el => !elementsInGridSubaru.includes(el));
+
+if (elementsNotInGridSubaru.length > 0) {
+    let dropdown = $('select[id*="ctl00_ctl00_Main_Main_gvDealerPrintDocuments_ctl"]');
+    let addButton = $('select[id*="lnkInsert"]');
+    dropdown.find('option').each(function(){
+        let optionText = $(this).text().trim();
+        if(elementsNotInGridSubaru.includes(optionText)){
+            dropdown.val($(this).val()); // select the matching option by value
+            //overrideConfirm()
+            $('[id^="ctl00_ctl00_Main_Main_gvDealerPrintDocuments_"][id$="_lnkInsert"]').click(); // trigger add button
+            return false; // break the loop after the first match
+        }
+    });
+} else {
+    console.log('both elements are in the grid');
+    console.log('switch to vision');
+    switchPrintMailDocSelector()
+
+}
+}
+
+let visionFn = () => {
+        $('tr.GridRow, tr.GridRowAlt').each(function() {
+        let tdText = $(this).find('td:nth-child(2)').text().trim();
+        if (visionPrintMailDocs.includes(tdText)) {
+            elementsInGridVision.push(tdText);
+        }
+    });
+
+    let elementsNotInGridVision = visionPrintMailDocs.filter(el => !elementsInGridVision.includes(el));
+
+    if (elementsNotInGridVision.length > 0) {
+        let dropdown = $('select[id*="ctl00_ctl00_Main_Main_gvDealerPrintDocuments_ctl"]');
+        let addButton = $('select[id*="lnkInsert"]');
+        dropdown.find('option').each(function(){
+            let optionText = $(this).text().trim();
+            if(elementsNotInGridVision.includes(optionText)){
+                dropdown.val($(this).val()); // select the matching option by value
+                //overrideConfirm()
+                $('[id^="ctl00_ctl00_Main_Main_gvDealerPrintDocuments_"][id$="_lnkInsert"]').click(); // trigger add button
+                return false; // break the loop after the first match
+            }
+        });
+    } else {
+        console.log('both elements are in the grid')
+        console.log('next dealership')
+        nextDealership();
+    }
+}
+
+if (state === 'notnext') {
+    if (mailSelector == 2) {
+        console.log('subaru mail selector')
+        subaruUnitedFn();
+    } else if (mailSelector == 13) {
+        console.log('vision mail selector')
+        visionFn();
+
+    }
+}
+
+function nextDealership(){
+   sessionStorage.state2 = "next";
+   window.location.href = "https://autoloop.us/DMS/App/Default.aspx";
+}
+
