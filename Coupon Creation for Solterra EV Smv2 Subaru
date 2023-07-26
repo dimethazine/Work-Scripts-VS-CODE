@@ -1,0 +1,101 @@
+// ==UserScript==
+// @name         Coupon Creation for Solterra EV Smv2 Subaru
+// @author       Roy
+// @match        https://autoloop.us/DMS/App/DealershipSettings/CouponDefaultContent.aspx?CouponId=00000000-0000-0000-0000-000000000000&IsMaster=False&IsCampaignMaster=False
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=autoloop.us
+// @grant        none
+// ==/UserScript==
+let state = sessionStorage.state2;
+
+const ev0012 = {
+    title: 'Brake Inspection',
+    internal: 'EV0012',
+    amount: 0,
+    body: 'Service includes:\n\n - Inspect brake pads/shoes, rotors/drumn\n - Inspect calipers/wheel cylinders\n - Add brake fluid (as needed)\n - Check & adjust parking brake\n - Road test',
+    disclaimer: 'Valid only at $companyName. Please present coupon at time of write-up. Cannot be combined with any other specials or redeemed for cash. Prices may vary by model. Service will be completed per model specifications. Subaru EVs only.',
+    test: $('#ctl00_ctl00_Main_Main_couponManager_couponCategorySelector_lbCouponCategories_chzn_o_2')
+}
+const ev0389 = {
+    title: 'Tire Rotation',
+    internal: 'EV0389',
+    amount: 5,
+    body: 'As we rotate your tires, we will also inspect for tire wear and set your tire pressure, complete with a road test. Tire rotation is recommended every 6 months or 5,000 miles.',
+    disclaimer: 'Valid only at $companyName. Please present coupon at time of write-up. Cannot be combined with any other specials or redeemed for cash. Prices may vary by model. Service will be completed per model specifications. Subaru EVs only.',
+    test: $('#ctl00_ctl00_Main_Main_couponManager_couponCategorySelector_lbCouponCategories_chzn_o_11')
+}
+const coupons = [ev0012, ev0389];
+
+function makeCoupon(coupon) {
+    $('#ctl00_ctl00_Main_Main_couponManager_tfName_textBox').val(coupon.title)
+    $('#ctl00_ctl00_Main_Main_couponManager_tfInternalName_textBox').val(coupon.internal)
+    $('#ctl00_ctl00_Main_Main_couponManager_txtAmount').val(coupon.amount)
+    $('#ctl00_ctl00_Main_Main_couponManager_txtBody_textBox').val(coupon.body)
+    $('#ctl00_ctl00_Main_Main_couponManager_tfDetails_textBox').val(coupon.disclaimer)
+    $('#ctl00_ctl00_Main_Main_couponManager_couponCategorySelector_lbCouponCategories_chzn').trigger('mousedown');
+    coupon.test.trigger('mouseup')
+    $('#ctl00_ctl00_Main_Main_couponManager_couponCategorySelector_lbCouponCategories_chzn').trigger('blur');
+    if (sessionStorage.step == 1) {
+        sessionStorage.step = 2;
+        sessionStorage.setItem('currentCoupon', 1)
+        $('#ctl00_ctl00_Main_Main_couponManager_btnSubmit').click()
+    } else if (sessionStorage.step == 2) {
+        sessionStorage.step = 12;
+        $('#ctl00_ctl00_Main_Main_couponManager_btnSubmit').click()
+    }
+
+  //  }
+}
+
+
+  function createCoupon() {
+        let currentCoupon = sessionStorage.getItem('currentCoupon');
+        if (!currentCoupon) {
+            currentCoupon = 0;
+        }
+      const coupon = coupons[currentCoupon];
+
+      if (sessionStorage.step == 1) {
+          makeCoupon(coupon, currentCoupon)
+      } else if (sessionStorage.step == 2) {
+          makeCoupon(coupon, currentCoupon)
+      }
+    }
+
+
+console.log(sessionStorage.step)
+if (state == 'notnext') {
+    console.log('test')
+    setTimeout (function() {
+        let currentStep = sessionStorage.step; // page loads each time
+        if (!currentStep) {
+            currentStep = 0;
+        }
+        if ($('#ctl00_ctl00_Main_Main_couponManager_ddlCouponType').val() == 'AmountOff' && currentStep == 0) { // runs when first loads to create first coupon and switch to amount total
+            $('#ctl00_ctl00_Main_Main_couponManager_ddlCouponType').val('AmountTotal').trigger('change')
+            console.log('switch to amount total and sessionStorage.step = 1')
+            sessionStorage.step = 1
+        } else if ($('#ctl00_ctl00_Main_Main_couponManager_ddlCouponType').val() == 'AmountOff' && currentStep == 2) { // runs when first loads
+            createCoupon()
+        } else if (currentStep != 10 && currentStep == 1) { // 1 is for first coupon, 4 is for second coupon
+            createCoupon()
+        } else if (currentStep == 12 && sessionStorage.getItem('currentCoupon') == 1) {
+            console.log('next dealership')
+            nextDealership();
+        }
+    }, 500)
+}
+
+
+function nextDealership(){
+    sessionStorage.state2 = "next";
+    sessionStorage.setItem('currentCoupon', 0);
+    sessionStorage.step = 0;
+    window.location.href = "https://autoloop.us/DMS/App/Default.aspx";
+}
+
+
+
+
+
+
+
