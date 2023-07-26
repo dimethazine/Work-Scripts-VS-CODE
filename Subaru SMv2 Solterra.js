@@ -299,7 +299,7 @@ function emailTemplateVmgSelectorStart(emailTemplateInterval, currentVmg) {
 }
 
 // Coupon Selector Function
-function selectOptionByText(dropdownSelector, couponText) {
+function selectCouponByText(dropdownSelector, couponText) {
   let couponSelector = $(dropdownSelector);
   let dropdownOptions = couponSelector.find("option");
 
@@ -569,18 +569,18 @@ function configureEVAggressive() {
         // Print Mail
         $(print2).val(s2sBefore23SASEV).trigger("change");
         $(print4).val(fmcSASComplete1).trigger("change");
-        $(print5).val("1d13596d-1737-484a-aab4-4ba7ffc862b0").trigger("change");
+        $(print5).val("1d13596d-1737-484a-aab4-4ba7ffc862b0").trigger("change"); // !important
         $(print6).val(fmcSASComplete3).trigger("change");
 
         // Coupon
-        selectOptionByText(couponSelectorInterval1coupon1, "Subaru SAS - S2S");
-        selectOptionByText(couponSelectorInterval2coupon1, "Subaru SAS - S2S");
-        selectOptionByText(couponSelectorInterval3coupon1, "EV0012");
-        selectOptionByText(couponSelectorInterval3coupon2, "EV0389");
-        selectOptionByText(couponSelectorInterval4coupon1, "EV0012");
-        selectOptionByText(couponSelectorInterval4coupon2, "EV0389");
-        selectOptionByText(couponSelectorInterval5coupon1, "EV0012");
-        selectOptionByText(couponSelectorInterval5coupon2, "EV0389");
+        selectCouponByText(couponSelectorInterval1coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval2coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval3coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval3coupon2, "EV0012");
+        selectCouponByText(couponSelectorInterval4coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval4coupon2, "EV0012");
+        selectCouponByText(couponSelectorInterval5coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval5coupon2, "EV0012");
 
         // Email Subject Lines
         $(emailSubj1).val("It's almost time for your first Subaru EV service");
@@ -610,7 +610,12 @@ function configureEVAggressive() {
 
         // Email Templates
         $(email1).val(FO2010401).trigger("chosen:updated"); // -45 day
-        $(email2).val(FO2010501fallback).trigger("chosen:updated"); // -23 day
+        // Email Template Interval 2 Selector
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20105-01-");
+        } else if (vmgOrEv == "ev") {
+          $(email2).val(FO2010501fallback).trigger("chosen:updated"); // -23 day
+        }
         $(email3).val(FO2010601).trigger("chosen:updated"); // 5 day
         $(email4).val(FO2011001).trigger("chosen:updated"); // 35 day
         $(email5).val(FO2011101).trigger("chosen:updated"); // 65 day
@@ -625,6 +630,8 @@ function configureEVAggressive() {
         // Print Mail
         $(print2).val(rrBefore23SASEV).trigger("change");
         // Coupon
+        selectCouponByText(couponSelectorInterval1coupon1, "Subaru SAS - RR");
+        selectCouponByText(couponSelectorInterval1coupon2, "EV0012");
 
         // Email Subject Lines
         $(emailSubj1).val(
@@ -644,7 +651,11 @@ function configureEVAggressive() {
 
         // Email Templates
         $(email1).val(FO2012201).trigger("chosen:updated");
-        $(email2).val(FO2012301fallback).trigger("chosen:updated");
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20123-01-");
+        } else if (vmgOrEv == "ev") {
+          $(email2).val(FO2012301fallback).trigger("chosen:updated"); // -23 day
+        }
         $(email3).val(FO2012401).trigger("chosen:updated");
       }
       break;
@@ -662,14 +673,14 @@ function configureEVAggressive() {
         $(print6).val(fmcComplete3EV).trigger("change");
 
         // Coupon
-        selectOptionByText(couponSelectorInterval1coupon1, "EV0012");
-        selectOptionByText(couponSelectorInterval1coupon2, "EV0389");
-        selectOptionByText(couponSelectorInterval3coupon1, "EV0012");
-        selectOptionByText(couponSelectorInterval3coupon2, "EV0389");
-        selectOptionByText(couponSelectorInterval4coupon1, "EV0012");
-        selectOptionByText(couponSelectorInterval4coupon2, "EV0389");
-        selectOptionByText(couponSelectorInterval5coupon1, "EV0012");
-        selectOptionByText(couponSelectorInterval5coupon2, "EV0389");
+        selectCouponByText(couponSelectorInterval1coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval1coupon2, "EV0389");
+        selectCouponByText(couponSelectorInterval3coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval3coupon2, "EV0389");
+        selectCouponByText(couponSelectorInterval4coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval4coupon2, "EV0389");
+        selectCouponByText(couponSelectorInterval5coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval5coupon2, "EV0389");
 
         // Email Subject Lines
         $(emailSubj1).val("It's almost time for your first Subaru EV service");
@@ -719,6 +730,8 @@ function configureEVAggressive() {
         $(print2).val(rrBefore23nonSASEV).trigger("change");
 
         // Coupon
+        selectCouponByText(couponSelectorInterval1coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval1coupon2, "EV0389");
 
         // Email Subject Lines
         $(emailSubj1).val("We'll help you stay current on your EV care");
@@ -737,7 +750,11 @@ function configureEVAggressive() {
 
         // Email Templates
         $(email1).val(FO2011901).trigger("chosen:updated");
-        $(email2).val(FO2012001fallback).trigger("chosen:updated");
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20120-01-");
+        } else if (vmgOrEv == "ev") {
+          $(email2).val(FO2012001fallback).trigger("chosen:updated"); // -23 day
+        }
         $(email3).val(FO2012101).trigger("chosen:updated");
       }
       break;
@@ -768,6 +785,11 @@ function configureEVLight() {
         $(print3).val(fmcSASComplete3).trigger("change");
 
         // Coupon
+        selectCouponByText(couponSelectorInterval0coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval1coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval1coupon2, "EV0012");
+        selectCouponByText(couponSelectorInterval2coupon1, "Subaru SAS - S2S");
+        selectCouponByText(couponSelectorInterval2coupon2, "EV0012");
 
         // Email Subject Lines - Good
         $(emailSubj1).val(
@@ -786,7 +808,11 @@ function configureEVLight() {
         $(delay3).val(90).trigger("change");
 
         // Email Templates
-        $(email1).val(FO2010501fallback).trigger("chosen:updated"); // -45 day
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20105-01-");
+        } else if (vmgOrEv == "ev") {
+          $(email2).val(FO2010501fallback).trigger("chosen:updated"); // -23 day
+        }
         $(email2).val(FO2011001).trigger("chosen:updated"); // -23 day
         $(email3).val(FO2011201).trigger("chosen:updated"); // 5 day
 
@@ -798,7 +824,10 @@ function configureEVLight() {
 
         // Print Mail
         $(print1).val(rrBefore23SASEV).trigger("change");
+
         // Coupon
+        selectCouponByText(couponSelectorInterval0coupon1, "Subaru SAS - RR");
+        selectCouponByText(couponSelectorInterval0coupon2, "EV0012");
 
         // Email Subject Lines
         $(emailSubj1).val(
@@ -809,7 +838,11 @@ function configureEVLight() {
         $(delay1).val(-23).trigger("change");
 
         // Email Templates
-        $(email1).val(FO2012301fallback).trigger("chosen:updated");
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20123-01-");
+        } else if (vmgOrEv == "ev") {
+          $(email2).val(FO2012301fallback).trigger("chosen:updated"); // -23 day
+        }
       }
       break;
 
@@ -825,6 +858,12 @@ function configureEVLight() {
         $(print3).val(fmcComplete3EV).trigger("change");
 
         // Coupon
+        selectCouponByText(couponSelectorInterval0coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval0coupon2, "EV0389");
+        selectCouponByText(couponSelectorInterval1coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval1coupon2, "EV0389");
+        selectCouponByText(couponSelectorInterval2coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval2coupon2, "EV0389");
 
         // Email Subject Lines
         $(emailSubj1).val(
@@ -843,7 +882,11 @@ function configureEVLight() {
         $(delay3).val(90).trigger("change");
 
         // Email Templates
-        $(email1).val(FO2010201fallback).trigger("chosen:updated"); // -45 day
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20102-01-");
+        } else if (vmgOrEv == "ev") {
+          $(email2).val(FO2010201fallback).trigger("chosen:updated"); // -23 day
+        }
         $(email2).val(FO2010701).trigger("chosen:updated"); // -23 day
         $(email3).val(FO2010901).trigger("chosen:updated"); // 5 day
 
@@ -856,6 +899,8 @@ function configureEVLight() {
         $(print1).val(rrBefore23nonSASEV).trigger("change");
 
         // Coupon
+        selectCouponByText(couponSelectorInterval0coupon1, "EV0012");
+        selectCouponByText(couponSelectorInterval0coupon2, "EV0389");
 
         // Email Subject Lines
         $(emailSubj1).val(
@@ -863,11 +908,14 @@ function configureEVLight() {
         );
 
         // Delays
-
         $(delay1).val(-23).trigger("change");
 
         // Email Templates
-        $(email1).val(FO2012001fallback).trigger("chosen:updated");
+        if (vmgOrEv == "vmg") {
+          emailTemplateVmgSelectorStart(email2, "FO20120-01-");
+        } else if (vmgOrEv == "ev") {
+          $(email2).val(FO2012001fallback).trigger("chosen:updated"); // -23 day
+        }
       }
       break;
   }
